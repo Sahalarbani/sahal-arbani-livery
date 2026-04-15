@@ -1,0 +1,53 @@
+# @version 1.0.0
+# @changelog
+# - [16-04-2026] Inisialisasi .gitignore untuk arsitektur monorepo Sahal Arbani Livery.
+# - [16-04-2026] Proteksi file environment (.env), node_modules, dan hasil build (dist).
+# - [16-04-2026] Penambahan rule untuk sistem operasi (OS) dan editor (VSCode/JetBrains).
+
+# Dependency
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+
+# Production / Build
+dist/
+build/
+.vercel
+
+# Environment Variables (Sangat Krusial!)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.local
+
+# Firebase
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+pubsub-debug.log*
+ui-debug.log*
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor & OS
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
+
+# Backend Specific
+api/node_modules/

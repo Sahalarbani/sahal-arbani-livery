@@ -1,0 +1,40 @@
+{
+  "_version": "1.2.0",
+  "_changelog": "[15-04-2026] Inisialisasi package.json dengan Vite 4 (Rollup 3 murni), React, Firebase, dan dependensi UI.\n- [15-04-2026] Penambahan backend dependensi (Express, Cloudinary) dan setup script concurrently untuk monorepo lokal.",
+  "name": "sahal-arbani-livery",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev:frontend": "vite",
+    "dev:backend": "nodemon api/index.js",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "cloudinary": "^2.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase": "^10.10.0",
+    "framer-motion": "^11.0.0",
+    "lucide-react": "^0.360.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-helmet-async": "^2.0.4",
+    "react-router-dom": "^7.14.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.19",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.0",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.2"
+  }
+}

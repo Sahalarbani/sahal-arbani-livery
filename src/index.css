@@ -1,0 +1,31 @@
+/**
+ * @version 1.1.0
+ * @changelog
+ * - [15-04-2026] Penambahan utilitas CSS khusus mobile (hide-scrollbar).
+ * - [15-04-2026] Pembuatan class utility glass-panel standar iOS 26.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #0F0F0F;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none; /* Mencegah efek bounce elastis berlebih di HP */
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-charcoal/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
+  }
+  
+  /* Menyembunyikan scrollbar tapi tetap bisa di-scroll */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

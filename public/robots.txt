@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+
+# URL sitemap lu nanti pas web udah online penuh
+Sitemap: https://sahal-arbani-livery.firebaseapp.com/sitemap.xml
