@@ -1,31 +1,38 @@
 /**
- * @version 1.2.0
+ * @version 1.3.0
  * @changelog
- * - [16-04-2026] Refaktor UI: Menghapus total efek Glassmorphism (backdrop-blur) sesuai standar performa baru.
- * - [16-04-2026] Transisi ke tema Solid Pitch Black (OLED) yang konsisten dengan halaman publik.
- * - [16-04-2026] Mempertahankan logika otentikasi PIN dan proteksi rute (Outlet).
+ * - [16-04-2026] Performance (INP Fix): Implementasi useTransition (React 18 Concurrent Rendering) untuk menurunkan latency input & click.
+ * - [16-04-2026] Penambahan state loading pada tombol submit untuk instant visual feedback.
+ * - [16-04-2026] Mempertahankan UI Solid Pitch Black dan logika proteksi PIN.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useTransition } from 'react';
 import { Outlet, Link } from 'react-router-dom';
-import { ShieldAlert, Lock, ArrowRight } from 'lucide-react';
+import { ShieldAlert, Lock, ArrowRight, Loader2 } from 'lucide-react';
 
 export const AdminLayout: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [pinInput, setPinInput] = useState<string>('');
   const [error, setError] = useState<string>('');
+  
+  // Senjata pamungkas penurun skor INP (Interaction to Next Paint)
+  const [isPending, startTransition] = useTransition();
 
   const secretPin = import.meta.env.VITE_ADMIN_PIN;
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (pinInput === secretPin) {
-      setIsAuthenticated(true);
-      setError('');
-    } else {
-      setError('PIN tidak valid.');
-      setPinInput('');
-    }
+    
+    // Pindahkan logika berat/state update ke background task
+    startTransition(() => {
+      if (pinInput === secretPin) {
+        setIsAuthenticated(true);
+        setError('');
+      } else {
+        setError('PIN tidak valid.');
+        setPinInput('');
+      }
+    });
   };
 
   if (!isAuthenticated) {
@@ -45,18 +52,31 @@ export const AdminLayout: React.FC = () => {
               <input
                 type="password"
                 value={pinInput}
-                onChange={(e) => setPinInput(e.target.value)}
+                onChange={(e) => {
+                  setPinInput(e.target.value);
+                  if (error) setError(''); // Hapus pesan error saat user mulai ngetik lagi
+                }}
                 placeholder="Masukkan PIN"
-                className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-terracotta/50 transition-colors text-center tracking-[0.5em]"
+                disabled={isPending}
+                className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-terracotta/50 transition-colors text-center tracking-[0.5em] disabled:opacity-50"
                 autoFocus
               />
             </div>
             {error && <p className="text-sm text-terracotta text-center">{error}</p>}
             <button
               type="submit"
-              className="w-full bg-terracotta text-white font-medium rounded-xl px-4 py-3 hover:bg-terracotta/90 transition-colors flex justify-center items-center gap-2"
+              disabled={isPending || pinInput.length === 0}
+              className="w-full bg-terracotta text-white font-medium rounded-xl px-4 py-3 hover:bg-terracotta/90 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              Masuk Workspace <ArrowRight className="w-4 h-4" />
+              {isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" /> Memverifikasi...
+                </>
+              ) : (
+                <>
+                  Masuk Workspace <ArrowRight className="w-4 h-4" />
+                </>
+              )}
             </button>
             <div className="text-center mt-4">
               <Link to="/" className="text-xs text-white/40 hover:text-white transition-colors">

@@ -142,8 +142,14 @@ app.get('/sitemap.xml', async (req, res) => {
 
 // Setup Port (5000 untuk backend lokal)
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`[Server] Backend Express menyala di http://localhost:${PORT}`);
-});
 
+// Trik Senior: Kita bungkus agar app.listen hanya jalan di lokal (bukan di Vercel)
+// dan paksa pakai 127.0.0.1 agar Vite Proxy bisa konek tanpa error ECONNREFUSED
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, '127.0.0.1', () => {
+    console.log(`[Server] Backend Express menyala di http://127.0.0.1:${PORT}`);
+  });
+}
+
+// Export app untuk kebutuhan Vercel Serverless Function ke depannya
 export default app;
